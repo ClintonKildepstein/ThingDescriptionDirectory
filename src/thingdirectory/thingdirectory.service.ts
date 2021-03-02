@@ -1,51 +1,45 @@
+import { DatabaseService } from './../database.service';
 import { Injectable } from '@nestjs/common';
 var Ajv = require('ajv');
-const { Client } = require('pg')
 //importo come file locale .. eliminato formato iri
 import * as schema from './jsonschema.json';
 const mergePatch = require("json-merge-patch");
 
 @Injectable()
 export class ThingdirectoryService {
+    constructor(private readonly databaseService: DatabaseService) {}
 
-    createTD(data: any): string {
-       // console.log(data);
+    async createTD(data: any): Promise<string> {
         var ajv = new Ajv();
         var validate = ajv.compile(schema);
         var valid = validate(data);
-        var ris;
-        if (valid) {
-            //console.log('Valid!');
-            const client = this.connectDB();
-            const query = {
-                text: 'INSERT INTO thingd(td) VALUES($1)  RETURNING idt',
-                values: [data],
-            }
 
-            ris = client
-                .query(query)
-                .then(res => {
-                    //console.log(res.rows[0].idt);
-                    return res.rows[0].idt;
-                })
-                .catch(e => console.error(e.stack))
-                .finally(() => { client.end() })
-            return ris;
-        }
-        else {
+        if (!valid) {
             console.log('Invalid: ' + ajv.errorsText(validate.errors));
             throw new Error("Errore");
         }
 
+        const client = await this.databaseService.connect();
+        const query = {
+            text: 'INSERT INTO thingd(td) VALUES($1)  RETURNING idt',
+            values: [data],
+        }
+
+        return client
+            .query(query)
+            .then(res => {
+                return res.rows[0].idt;
+            })
+            .finally(() => { client.release() });
     }
 
-    retrieveTD(id: string): string {
-        const client = this.connectDB();
+    async retrieveTD(id: string): Promise<string> {
+        const client = await this.databaseService.connect();
         const query1 = {
             text: 'SELECT idt FROM thingd',
         }
 
-        var ris = client
+        return client
             .query(query1)
             .then(res => {
                 var exist = 0;
@@ -75,19 +69,15 @@ export class ThingdirectoryService {
                     return td;
                 }
             })
-
-            .catch(e => console.error(e.stack))
-            .finally(() => { client.end() })
-
-        return ris;
+            .finally(() => { client.release() });
     }
 
-    retrieveAllTD(): any {
-        const client = this.connectDB();
+    async retrieveAllTD(): Promise<any> {
+        const client = await this.databaseService.connect();
         const query = {
             text: 'SELECT * FROM thingd',
         }
-        var td = client
+        return client
             .query(query)
             .then(res => {
                 var tds: string[];
@@ -97,72 +87,59 @@ export class ThingdirectoryService {
                 }
                 return tds;
             })
-            .catch(e => console.error(e.stack))
-            .finally(() => { client.end() })
-
-        return td;
+            .finally(() => { client.release() })
     }
 
-    deleteTD(id: string) {
-
-        const client = this.connectDB();
+    async deleteTD(id: string): Promise<void> {
+        const client = await this.databaseService.connect();
         const query = {
             text: 'DELETE FROM thingd WHERE idt= $1',
             values: [id],
         }
 
-        client
+        return client
             .query(query)
             .then(res => {
                 console.log(res)
             })
-            .catch(e => console.error(e.stack))
-            .finally(() => { client.end() })
+            .finally(() => { client.release() })
 
     }
 
-    updateTD(data: any, id: string): string {
-
+    async updateTD(data: any, id: string): Promise<string> {
         var ajv = new Ajv();
         var validate = ajv.compile(schema);
 
         var valid = validate(data);
-        var ris;
-        if (valid) {
-            console.log('Valid!');
 
-            const client = this.connectDB();
-            const query = {
-                text: 'UPDATE thingd set td= $1 WHERE idt= $2',
-                values: [data, id]
-            }
-
-            ris = client
-                .query(query)
-                .then(res => {
-                    console.log(res)
-                    return "OK";
-                })
-                .catch(e => console.error(e.stack))
-                .finally(() => { client.end() })
-        }
-        else {
+        if (!valid) {
             console.log('Invalid: ' + ajv.errorsText(validate.errors));
             throw new Error("Errore");
-        } return ris;
+        }
+
+        const client = await this.databaseService.connect();
+        const query = {
+            text: 'UPDATE thingd set td= $1 WHERE idt= $2',
+            values: [data, id]
+        }
+
+        return client
+            .query(query)
+            .then(res => {
+                console.log(res)
+                return "OK";
+            })
+            .finally(() => { client.release() })
     }
 
-
-   updatePartialTD(data: any, id: string): string {
-
-        const client = this.connectDB();
+   async updatePartialTD(data: any, id: string): Promise<string> {
+        const client = await this.databaseService.connect();
         const query = {
             text: 'SELECT td FROM thingd WHERE idt = $1',
             values: [id],
         }
 
-        var ris = "";
-        ris = client
+        return client
             .query(query)
             .then(res => {
                 let td = res.rows[0].td;
@@ -172,59 +149,37 @@ export class ThingdirectoryService {
                 var validate = ajv.compile(schema);
 
                 var valid = validate(td);
-                let riss = "";
-                if (valid) {
-                    console.log('Valid!');
 
-                    const query = {
-                        text: 'UPDATE thingd set td= $1 WHERE idt= $2',
-                        values: [td, id]
-                    }
-
-                    riss = client
-                        .query(query)
-                        .then(res => {
-                            console.log(res)
-                            return "OK";
-                        })
-                        .catch(e => console.error(e.stack))
-                }
-                else {
+                if (!valid) {
                     console.log('Invalid: ' + ajv.errorsText(validate.errors));
                     throw new Error("Errore");
                 }
-                return riss;
+
+                console.log('Valid!');
+
+                const query = {
+                    text: 'UPDATE thingd set td= $1 WHERE idt= $2',
+                    values: [td, id]
+                }
+
+                return client
+                    .query(query)
+                    .then(res => {
+                        console.log(res)
+                        return "OK";
+                    })
             })
-            .catch(e => console.error(e.stack))
-            .finally(() => { client.end() })
-        return ris;
+            .finally(() => { client.release() })
     }
 
+    async existID(id: string): Promise<boolean> {
 
-    connectDB(): any {
-
-        const client = new Client({
-            user: 'postgres',
-            host: 'localhost',
-            database: 'ThingDirectory',
-            password: 'ciaociao',
-            port: 5432,
-        })
-        client
-            .connect()
-            .then(() => console.log('connected'))
-            .catch(err => console.error('connection error', err.stack))
-        return client;
-    }
-
-    existID(id: string): boolean {
-
-        const client = this.connectDB();
+        const client = await this.databaseService.connect();
         const query = {
             text: 'SELECT idt FROM thingd',
         }
 
-        var ris = client
+        return client
             .query(query)
             .then(res => {
                 var riss = false;
@@ -240,11 +195,8 @@ export class ThingdirectoryService {
                 } else { riss = true; }
                 return riss;
             })
-            .catch(e => console.error(e.stack))
-            .finally(() => { client.end() })
+            .finally(() => { client.release() })
 
-
-        return ris;
     }
 
 }

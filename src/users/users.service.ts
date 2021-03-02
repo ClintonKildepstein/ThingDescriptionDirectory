@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { DatabaseService } from './../database.service';
 export type User = {
   userId:string,
   username:string,
   password:string
 };
-const { Client } = require('pg')
 
 @Injectable()
 export class UsersService {
+  constructor(private readonly databaseService: DatabaseService) {}
 
-  getUser(username:string): User{
-    const client = this.connectDB();
+  async getUser(username:string): Promise<User>{
+    const client = await this.databaseService.connect();
     const query = {
       text: 'SELECT * FROM account where username=$1',
       values: [username]
   }
-  var acc = client
+  return client
       .query(query)
       .then(res => {
         var user: User={ userId:"id", username:"user",password:"pass"};
@@ -27,10 +28,7 @@ export class UsersService {
          user.password=res.rows[0].passw;
           return user;}
       })
-      .catch(e => console.error(e.stack))
-      .finally(() => { client.end() })
-
-  return acc;
+      .finally(() => { client.release() })
     }
 
   async registerUser(data): Promise<any>{
@@ -42,40 +40,24 @@ export class UsersService {
     
     if (checkuser!=undefined){
       throw new Error("Errore");
-    } else {
-      const client = this.connectDB();
+    } 
+
+      const client = await this.databaseService.connect()
     const query = {
         text: 'INSERT INTO account(username,passw) VALUES($1,$2)  RETURNING ida',
         values: [user,pass],
     }
 
-   var ris = client
+   return client
         .query(query)
         .then(res => {
           console.log(res.rows[0].ida);
             return res.rows[0].ida;
         })
         .catch(e => console.error(e.stack))
-        .finally(() => { client.end() })
-    return ris;
-      }
+        .finally(() => { client.release() })
+      
   }
-
-  connectDB(): any {
-
-    const client = new Client({
-        user: 'postgres',
-        host: 'localhost',
-        database: 'ThingDirectory',
-        password: 'ciaociao',
-        port: 5432,
-    })
-    client
-        .connect()
-        .then(() => console.log('connected'))
-        .catch(err => console.error('connection error', err.stack))
-    return client;
-}
 
   async findOne(username: string): Promise<User | undefined> {
     var user= this.getUser(username); 
