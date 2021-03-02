@@ -21,7 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^7.6.5",
+    "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.0.0",
     "@nestjs/jwt": "^7.2.0",
     "@nestjs/passport": "^7.1.5",
@@ -29,6 +31,7 @@
     "@node-wot/binding-coap": "^0.7.4",
     "@node-wot/binding-http": "^0.7.4",
     "@node-wot/core": "^0.7.4",
+    "app-root-path": "^3.0.0",
     "concurrently": "^5.3.0",
     "hbs": "^4.1.1",
     "json-colorizer": "^2.2.2",
@@ -49,7 +52,9 @@
     "@nestjs/schematics": "^7.0.0",
     "@nestjs/testing": "^7.5.5",
     "@node-wot/cli": "^0.7.4",
+    "@types/app-root-path": "^1.2.4",
     "@types/express": "^4.17.3",
+    "@types/hapi__joi": "^17.1.6",
     "@types/jest": "26.0.10",
     "@types/node": "^13.9.1",
     "@types/passport-jwt": "^3.0.3",

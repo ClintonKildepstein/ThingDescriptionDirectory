@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ApiConfigModule } from './api-config/api-config.module';
 import { DatabaseService } from './database.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [ApiConfigModule, AuthModule, UsersModule],
   controllers: [AppController, ThingdirectoryController, SearchThingController],
   providers: [DatabaseService, AppService, ThingdirectoryService, SearchThingService],
 })
