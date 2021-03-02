@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+   <link rel="stylesheet" href="css/style2.css">  
+  <script type="text/javascript"  src="myscript2.js"></script>
+
+</head>
+
+<body >
+   <div class="login-page">
+  <div class="form">
+    <div class="register-form" id="register-form">
+		<h1> Thing directory</h1> 
+		<h1> Sign up</h1>
+      <input type="text" id="user2" placeholder="Username"/>
+      <input type="password" id="pass2"  placeholder="Password"/>
+      <button onclick="register()">create account</button>
+	    <br> <br>
+       <button id="sign" onclick="change2()">Already registered? Sign in</button>
+  </div>
+    <div class="login-form" id="login-form">
+      <h1> Thing directory</h1> 
+		<h1> Sign in </h1>
+      <input type="text" id="user" placeholder="Username"/>
+      <input type="password" id="pass"  placeholder="Password"/>
+      <button onclick="login()">login</button> 
+	  <br> <br>
+      <button id="create" onclick="change()">Not registered? Sign up</button>
+    </div>
+    <div id="response" style="display: none;">
+	<pre id="show" style="font-size: 22px;color:rgb(0, 137, 172);"> </pre>
+   <button type="button" class="button2" id="click3" onclick="window.location.href='http://localhost:3000/app'" style="display:none;">HOME</button>
+  </div>
+  </div>
+  
+</div>
+  
+ 
+</body>
+ 
+</html>

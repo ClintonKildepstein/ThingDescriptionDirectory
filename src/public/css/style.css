@@ -1,0 +1,78 @@
+body {
+    background-color: rgb(209, 243, 253);
+    font-family: arial;
+}
+
+  .form {
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 500px;
+    margin: 30px auto 40px;
+    padding: 45px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  }
+
+h1,h2,b{
+    color:rgb(0, 137, 172);
+}
+
+button {
+    background: #1cced4;
+    color:white;
+    border: none;
+    padding: 5px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+}
+
+.textA{
+   height: 200 px;
+   width: 100 px;
+   visibility:hidden;
+}
+
+.div0{
+    float:left;
+    margin-left: 40px;
+}
+
+.div1{
+    border-radius: 10px;
+  background-color: white;
+   float: right;
+  margin-top:-650px;
+  margin-left:15px;
+  margin-right:20px;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+.div2{
+    margin-left: 550px;
+    float:left;
+    margin-top: 10px;
+    font-size: 28pt;
+ }
+
+.register{
+    font-size:22pt;
+    color:rgb(0, 137, 172);
+    
+}
+.button2 {
+    background: #1cced4;
+    color:white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 20px;
+    border-radius: 8px;
+}
+
+.input{
+    font-size: 22pt;
+}
+
+.result{
+    margin: 0 0 30px;
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>App</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="text/javascript" src="myscript.js"></script>
+  <link rel=stylesheet href=https://cdn.jsdelivr.net/npm/pretty-print-json@0.3/dist/pretty-print-json.css>
+  <script src=https://cdn.jsdelivr.net/npm/pretty-print-json@0.3/dist/pretty-print-json.min.js></script>
+</head>
+
+<body>
+  {{mess}}
+
+  <div class="form" id="form">
+    <h1> Thing directory</h1>
+    <h2> Import a TD</h2>
+    <input type="radio" value="value1" name="group1" id="r1"> Paste the TD here: </input><input type="text"
+      style="height: 200 px; width: 100 px;border-radius: 10px;" id="td"> </input> <br> <br>
+    <input type="radio" value="value3" name="group1" id="r2"> Put the URL here: <input type="text" id="urlTD"
+      style="border-radius: 10px;"> </input>
+    <button type="button" id="getTDU" onclick="getTDURL()">GET FROM URL</button> <br> <br>
+    <input type="radio" value="value2" name="group1" id="r3"> Import here: <input type="file" id="myFile"
+      name="filename" onchange="readFile(this)"> </input>
+    <br> <br>
+    <button onclick="select()"> Import </button>
+    <br> <br>
+    <b> Insert the ID of the TD </b>
+    <input type="number" id="idTD" style="border-radius: 10px;"></input> <br> <br>
+
+    <button type="button" id="get" onclick="getTD()">retrieveTD</button>
+    <button type="button" id="post" onclick="postTD()">createTD</button>
+    <button type="button" id="put" onclick="putTD()">updateTD</button>
+    <button type="button" id="delete" onclick="deleteTD()">deleteTD</button>
+    <br> <br>
+    <button type="button" id="patch" onclick="patchTD()">updatePartialTD</button>
+    <button type="button" id="getall" onclick="getAllTD()">retrieveAllTD</button>
+    <br> <br>
+    <b> Insert the JSONPath query </b>
+    <input type="text" id="search" style="border-radius: 10px;"></input> <button type="button" id="search"
+      onclick="searchTD()">searchTD</button>
+    <br> <br>
+    <b> Not Authorized? </b>
+    <button type="button" id="login" onclick="window.location.href='http://localhost:3000/auth'">Login</button>
+
+  </div>
+
+  <div class="div1" id="div1"
+    style="display: none;box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);">
+    <div class="result">
+      <h1 id="title"> Result </h1>
+      <pre style="width:400px;height:400px;" id="show">  </pre>
+    </div>
+  </div>
+
+</body>
+
+</html>
