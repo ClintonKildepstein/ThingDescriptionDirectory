@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import {join, resolve } from 'path';
+import { join, resolve } from 'path';
 import { AppModule } from './app.module';
 import path = require('path');
 var Ajv = require('ajv');
@@ -12,21 +12,19 @@ async function bootstrap() {
 
   app.useStaticAssets(resolve('./src/public'));
   app.setBaseViewsDir(resolve('./src/views'));
- // app.use(express.static("public"));
- // app.use(__dirname, 'public');
+  // app.use(express.static("public"));
+  // app.use(__dirname, 'public');
   app.setViewEngine('hbs');
-  
-  await app.listen(3000); 
+
+  await app.listen(3000);
 }
 var ajv = new Ajv();
 var validate = ajv.compile(schema);
 var valid = validate(dt);
 if (valid) {
-   // console.log('Valid!');
-  bootstrap(); 
+  // console.log('Valid!');
+  bootstrap();
+} else {
+  //console.log('Invalid: ' + ajv.errorsText(validate.errors));
+  throw new Error('Invalid TD: ' + ajv.errorsText(validate.errors));
 }
-else {
-    //console.log('Invalid: ' + ajv.errorsText(validate.errors));
-    throw new Error('Invalid TD: ' + ajv.errorsText(validate.errors));
-}
-

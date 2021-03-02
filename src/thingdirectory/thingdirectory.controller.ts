@@ -1,11 +1,22 @@
-import { Controller, Get, Post, Param, Body, Delete, Put, Patch, Response, Render, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Delete,
+  Put,
+  Patch,
+  Response,
+  Render,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from './../auth/jwt-auth.guard';
 import { ThingdirectoryService } from './thingdirectory.service';
 
-
 @Controller('td')
 export class ThingdirectoryController {
-  constructor(private thingdirectoryService: ThingdirectoryService) { }
+  constructor(private thingdirectoryService: ThingdirectoryService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -15,8 +26,7 @@ export class ThingdirectoryController {
       res.setHeader('Location', 'http://localhost:3000/td/' + id);
       res.writeHead(201);
       res.end();
-    }
-    catch (error) {
+    } catch (error) {
       res.status(400).end();
     }
   }
@@ -28,12 +38,16 @@ export class ThingdirectoryController {
     if (exist == true) {
       try {
         let td = await this.thingdirectoryService.retrieveTD(id);
-        res.status(201).send(td).end();
+        res
+          .status(201)
+          .send(td)
+          .end();
       } catch (error) {
         res.status(400).end();
       }
+    } else {
+      res.status(400).end();
     }
-    else { res.status(400).end(); }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -41,8 +55,14 @@ export class ThingdirectoryController {
   async retrieveAllTD(@Response() res): Promise<any> {
     var alltd = [];
     alltd = await this.thingdirectoryService.retrieveAllTD();
-    if (alltd.length == 0) { res.status(400).end(); }
-    else { res.status(201).send(alltd).end(); }
+    if (alltd.length == 0) {
+      res.status(400).end();
+    } else {
+      res
+        .status(201)
+        .send(alltd)
+        .end();
+    }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -52,8 +72,9 @@ export class ThingdirectoryController {
     if (exist == true) {
       this.thingdirectoryService.deleteTD(id);
       res.status(204).end();
+    } else {
+      res.status(400).end();
     }
-    else { res.status(400).end(); }
   }
 
   @UseGuards(JwtAuthGuard)
@@ -67,29 +88,28 @@ export class ThingdirectoryController {
       } catch (error) {
         res.status(400).end();
       }
+    } else {
+      res.status(400).end();
     }
-    else { res.status(400).end(); }
-
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async updatePartialTD(@Body() data: any, @Param('id') id: string, @Response() res) {
+  async updatePartialTD(
+    @Body() data: any,
+    @Param('id') id: string,
+    @Response() res,
+  ) {
     let exist = await this.thingdirectoryService.existID(id);
     if (exist == true) {
       try {
         var ris = await this.thingdirectoryService.updatePartialTD(data, id);
         res.status(204).end();
-      }
-      catch (error) {
+      } catch (error) {
         res.status(400).end();
       }
+    } else {
+      res.status(400).end();
     }
-    else { res.status(400).end(); }
-
   }
-
-
-
-
 }

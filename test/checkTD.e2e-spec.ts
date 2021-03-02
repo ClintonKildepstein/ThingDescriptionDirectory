@@ -15,23 +15,20 @@ describe('AppController (e2e)', () => {
     jest.spyOn(console, 'debug').mockImplementation(() => {});
     jest.spyOn(console, 'log').mockImplementation(() => {});
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule,AuthModule],
+      imports: [AppModule, AuthModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
   });
 
-  it("should be valid", () => {
+  it('should be valid', () => {
     var ajv = new Ajv();
     var validate = ajv.compile(schema);
     var valid = validate(dt2);
-   /* if (valid==false){
+    /* if (valid==false){
        console.log('Invalid: ' + ajv.errorsText(validate.errors));
     }*/
     expect(valid).toBe(true);
   });
- 
-  
-
 });

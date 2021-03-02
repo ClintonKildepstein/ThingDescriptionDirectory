@@ -13,6 +13,11 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [ApiConfigModule, AuthModule, UsersModule],
   controllers: [AppController, ThingdirectoryController, SearchThingController],
-  providers: [DatabaseService, AppService, ThingdirectoryService, SearchThingService],
+  providers: [
+    DatabaseService,
+    AppService,
+    ThingdirectoryService,
+    SearchThingService,
+  ],
 })
 export class AppModule {}

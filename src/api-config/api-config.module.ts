@@ -5,7 +5,8 @@ import * as Joi from '@hapi/joi';
 
 import { ApiConfigService } from './api-config.service';
 
-const envFilePath = `${path}/config/${process.env.NODE_ENV || 'development'}.env`;
+const envFilePath = `${path}/config/${process.env.NODE_ENV ||
+  'development'}.env`;
 
 const validationSchema = Joi.object({
   DB_HOSTNAME: Joi.string().required(),

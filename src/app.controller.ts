@@ -1,5 +1,12 @@
-
-import { Get, Controller, Request, Render, Post, UseGuards, Header } from '@nestjs/common';
+import {
+  Get,
+  Controller,
+  Request,
+  Render,
+  Post,
+  UseGuards,
+  Header,
+} from '@nestjs/common';
 import * as dt from './views/directorything.json';
 import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
@@ -16,20 +23,19 @@ export class AppController {
 
   @Get('app')
   @Render('index')
-  getTD() { return { mess: "" }; }
+  getTD() {
+    return { mess: '' };
+  }
 
   @Get('auth')
   @Render('login')
-  getAuth() { return { mess:""};}
-
+  getAuth() {
+    return { mess: '' };
+  }
 
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-
 }
-
-
-
