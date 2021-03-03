@@ -20,11 +20,8 @@ export class DatabaseService {
 
   async init(){
     const client = await this.connect();
-    let query = {
-      text: 'DROP TABLE thingd',
-    };
-    await client.query(query);
-    query = {
+   
+    const query = {
       text: 'CREATE TABLE IF NOT EXISTS thingd (id serial NOT NULL PRIMARY KEY, td jsonb NOT NULL );',
     };
 
