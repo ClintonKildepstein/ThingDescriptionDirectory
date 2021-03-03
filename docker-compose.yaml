@@ -1,0 +1,14 @@
+services:
+#  tdd:
+#    build: .
+#    ports: 
+#      - 3000:3000
+  pg:
+    image: postgres
+    restart: always
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: hello_darkness
+      POSTGRES_USER: wot
+      POSTGRES_DB: tdd

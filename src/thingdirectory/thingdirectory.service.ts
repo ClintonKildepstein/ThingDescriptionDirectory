@@ -13,7 +13,7 @@ export class ThingdirectoryService {
     var ajv = new Ajv();
     var validate = ajv.compile(schema);
     var valid = validate(data);
-
+    
     if (!valid) {
       console.log('Invalid: ' + ajv.errorsText(validate.errors));
       throw new Error('Errore');
@@ -21,14 +21,15 @@ export class ThingdirectoryService {
 
     const client = await this.databaseService.connect();
     const query = {
-      text: 'INSERT INTO thingd(td) VALUES($1)  RETURNING idt',
+      text: 'INSERT INTO thingd(td) VALUES($1)  RETURNING id',
       values: [data],
     };
 
     return client
       .query(query)
       .then(res => {
-        return res.rows[0].idt;
+        
+        return res.rows[0].id;
       })
       .finally(() => {
         client.release();
@@ -38,15 +39,17 @@ export class ThingdirectoryService {
   async retrieveTD(id: string): Promise<string> {
     const client = await this.databaseService.connect();
     const query1 = {
-      text: 'SELECT idt FROM thingd',
+      text: 'SELECT id FROM thingd',
     };
 
     return client
       .query(query1)
       .then(res => {
+
+        
         var exist = 0;
         for (var i = 0; i < res.rows.length; i++) {
-          if (res.rows[i].idt == id) {
+          if (res.rows[i].id == id) {
             exist = 1;
             break;
           }
@@ -55,7 +58,7 @@ export class ThingdirectoryService {
           throw new Error('Errore');
         } else {
           const query = {
-            text: 'SELECT td FROM thingd WHERE idt = $1',
+            text: 'SELECT td FROM thingd WHERE id = $1',
             values: [id],
           };
 
@@ -98,7 +101,7 @@ export class ThingdirectoryService {
   async deleteTD(id: string): Promise<void> {
     const client = await this.databaseService.connect();
     const query = {
-      text: 'DELETE FROM thingd WHERE idt= $1',
+      text: 'DELETE FROM thingd WHERE id= $1',
       values: [id],
     };
 
@@ -125,7 +128,7 @@ export class ThingdirectoryService {
 
     const client = await this.databaseService.connect();
     const query = {
-      text: 'UPDATE thingd set td= $1 WHERE idt= $2',
+      text: 'UPDATE thingd set td= $1 WHERE id= $2',
       values: [data, id],
     };
 
@@ -143,7 +146,7 @@ export class ThingdirectoryService {
   async updatePartialTD(data: any, id: string): Promise<string> {
     const client = await this.databaseService.connect();
     const query = {
-      text: 'SELECT td FROM thingd WHERE idt = $1',
+      text: 'SELECT td FROM thingd WHERE id = $1',
       values: [id],
     };
 
@@ -166,7 +169,7 @@ export class ThingdirectoryService {
         console.log('Valid!');
 
         const query = {
-          text: 'UPDATE thingd set td= $1 WHERE idt= $2',
+          text: 'UPDATE thingd set td= $1 WHERE id= $2',
           values: [td, id],
         };
 
@@ -183,16 +186,17 @@ export class ThingdirectoryService {
   async existID(id: string): Promise<boolean> {
     const client = await this.databaseService.connect();
     const query = {
-      text: 'SELECT idt FROM thingd',
+      text: 'SELECT id FROM thingd',
     };
 
     return client
       .query(query)
       .then(res => {
+        
         var riss = false;
         var exist = 0;
         for (var i = 0; i < res.rows.length; i++) {
-          if (res.rows[i].idt == id) {
+          if (res.rows[i].id == id) {
             exist = 1;
             break;
           }

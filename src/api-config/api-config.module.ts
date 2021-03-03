@@ -19,5 +19,6 @@ const validationSchema = Joi.object({
 @Module({
   imports: [ConfigModule.forRoot({ envFilePath, validationSchema })],
   providers: [ApiConfigService],
+  exports: [ApiConfigService]
 })
 export class ApiConfigModule {}

@@ -6,10 +6,13 @@ import path = require('path');
 var Ajv = require('ajv');
 import * as schema from './thingdirectory/jsonschema.json';
 import * as dt from './views/directorything.json';
+import { DatabaseService } from './database.service';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  const result = await app.get(DatabaseService).init();
+  
   app.useStaticAssets(resolve('./src/public'));
   app.setBaseViewsDir(resolve('./src/views'));
   // app.use(express.static("public"));

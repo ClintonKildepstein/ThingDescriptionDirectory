@@ -15,7 +15,7 @@ export class SearchThingService {
       .query(query)
       .then(res => {
         if (res.rows.length == 0) {
-          throw new Error('Errore');
+          throw new Error('No results');
         }
         return res.rows;
       })

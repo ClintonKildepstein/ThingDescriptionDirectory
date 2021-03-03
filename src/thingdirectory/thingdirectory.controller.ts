@@ -27,7 +27,7 @@ export class ThingdirectoryController {
       res.writeHead(201);
       res.end();
     } catch (error) {
-      res.status(400).end();
+      res.status(400).end(error.toString());
     }
   }
 
@@ -43,10 +43,10 @@ export class ThingdirectoryController {
           .send(td)
           .end();
       } catch (error) {
-        res.status(400).end();
+        res.status(400).end(error.toString());
       }
     } else {
-      res.status(400).end();
+      res.status(404).end("TD not found");
     }
   }
 

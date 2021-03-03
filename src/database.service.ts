@@ -17,4 +17,17 @@ export class DatabaseService {
     });
     return pool.connect();
   }
+
+  async init(){
+    const client = await this.connect();
+    let query = {
+      text: 'DROP TABLE thingd',
+    };
+    await client.query(query);
+    query = {
+      text: 'CREATE TABLE IF NOT EXISTS thingd (id serial NOT NULL PRIMARY KEY, td jsonb NOT NULL );',
+    };
+
+    return client.query(query)
+  }
 }

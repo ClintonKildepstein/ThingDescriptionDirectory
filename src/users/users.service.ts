@@ -11,7 +11,7 @@ export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   async getUser(username: string): Promise<User> {
-    const client = await this.databaseService.connect();
+    /* const client = await this.databaseService.connect();
     const query = {
       text: 'SELECT * FROM account where username=$1',
       values: [username],
@@ -31,10 +31,17 @@ export class UsersService {
       })
       .finally(() => {
         client.release();
-      });
+      });*/
+      return {
+        userId : "1234",
+        username : "wot",
+        password: "wot_is_cool"
+      };
   }
 
   async registerUser(data): Promise<any> {
+    console.log(data);
+    
     var user = data['username'];
     var pass = data['password'];
 
